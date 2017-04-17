@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 
 public class Image2BinaryMap {
 
-	// ×óÓÒ±ßÔµÑÕÉ«Îª°×É«
+	// å·¦å³è¾¹ç¼˜ä¸ºç™½è‰²
 	public static void main (String[] argv) throws IOException {
 		// Image Path
 		String ImgPath = "C:\\Users\\LqlSoft Computer\\Desktop\\MAP.png";
