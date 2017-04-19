@@ -30,42 +30,59 @@ public class Image2BinaryMap {
 			System.exit(0);
 		}
 		File result = new File(OutPath);
-		if (!result.exists()) {
-			 result.createNewFile();
+		
+		// Delete old file
+		if (result.exists()) {
+			result.delete();
 		}
+		result.createNewFile();
 		FileWriter fw = new FileWriter(result.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		
-		int i, j, whiteNum, blackNum, flagW, flagB;
-		Color temp = null;
-		for (j = 0;j < 960;j++) {
+		Integer width = image.getWidth();
+		Integer height = image.getHeight();
+		
+		Integer i, j, whiteNum, blackNum;
+		
+		Color pixel = null;
+		Color nextPixel = null;
+		Color Black = Color.black;
+		
+		for (j = 0;j < height;j++) {
 			whiteNum = 0;
 			blackNum = 0;
-			flagW = 0;
-			flagB = 1;
 			bw.write("10'd" + j + " : road_rom_data = {");
-			for (i = 511;i > 0;i--) {
-				temp = Color.getColor(null, image.getRGB(i, j));
-				if (temp.getRed() == 255 && temp.getGreen() == 255 && temp.getBlue() == 255) {
-					whiteNum += 1;
-					flagW = 0;
-					if (flagB  == 0) {
-						bw.write("{" + blackNum + "{1'b1}},");
+			pixel = Color.getColor(null, image.getRGB(width - 1, j));
+			for (i = width - 1;i >= 0;i--) {
+				nextPixel = i == 0 ? null : Color.getColor(null, image.getRGB(i-1, j));
+				// Black
+				if (pixel.equals(Black)){
+					// When next pixel is black
+					if (nextPixel != null && nextPixel.equals(Black)) {
+						blackNum += 1;
+					} 
+					// Other color
+					else {
+						bw.write("{" + (blackNum+1) + "{1'b1}}");
+						bw.write(nextPixel == null ? "};\n" : "," );
 						blackNum = 0;
-						flagB = 1;
 					}
 				}
-				else if (temp.getRed() == 0 && temp.getGreen() == 0 && temp.getBlue() == 0){
-					blackNum += 1;
-					flagB = 0;
-					if (flagW == 0) {
-						bw.write(whiteNum + "'b0,");
+				// Other color
+				else {
+					// When next pixel is black
+					if (nextPixel != null && !nextPixel.equals(Black)) {
+						whiteNum += 1;
+					}
+					// Other color
+					else {
+						bw.write((whiteNum+1) + "'b0");
+						bw.write(nextPixel == null ? "};\n" : "," );
 						whiteNum = 0;
-						flagW = 1;
 					}
 				}
+				pixel = nextPixel;
 			}
-			bw.write(whiteNum + "'b0};" + '\n');
 		}
 		bw.close();
 		System.out.println("Generate Successful!\nSave as " + OutPath);
