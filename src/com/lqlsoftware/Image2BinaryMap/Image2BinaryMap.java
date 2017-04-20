@@ -13,8 +13,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Image2BinaryMap {
-
-	// 左右边缘为白色
+	
 	public static void main (String[] argv) throws IOException {
 		// Image Path
 		String ImgPath = "C:\\Users\\LqlSoft Computer\\Desktop\\MAP.png";
