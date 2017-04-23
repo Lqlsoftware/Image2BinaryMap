@@ -47,13 +47,14 @@ public class Image2BinaryMap {
 		Color nextPixel = null;
 		Color Black = Color.black;
 		
+		bw.write("case(rom_address)\n");
 		for (j = 0;j < height;j++) {
 			whiteNum = 0;
 			blackNum = 0;
-			bw.write("10'd" + j + " : road_rom_data = {");
+			bw.write("\t10'd" + j + " : road_rom_data = {");
 			pixel = Color.getColor(null, image.getRGB(width - 1, j));
 			for (i = width - 1;i >= 0;i--) {
-				nextPixel = i == 0 ? null : Color.getColor(null, image.getRGB(i-1, j));
+				nextPixel = (i == 0) ? null : Color.getColor(null, image.getRGB(i-1, j));
 				// Black
 				if (pixel.equals(Black)){
 					// When next pixel is black
@@ -63,7 +64,7 @@ public class Image2BinaryMap {
 					// Other color
 					else {
 						bw.write("{" + (blackNum+1) + "{1'b1}}");
-						bw.write(nextPixel == null ? "};\n" : "," );
+						bw.write((nextPixel == null) ? "};\n" : "," );
 						blackNum = 0;
 					}
 				}
@@ -76,13 +77,14 @@ public class Image2BinaryMap {
 					// Other color
 					else {
 						bw.write((whiteNum+1) + "'b0");
-						bw.write(nextPixel == null ? "};\n" : "," );
+						bw.write((nextPixel == null) ? "};\n" : "," );
 						whiteNum = 0;
 					}
 				}
 				pixel = nextPixel;
 			}
 		}
+		bw.write("\tdefault : road_rom_data = 512'b0;\nendcase");
 		bw.close();
 		System.out.println("Generate Successful!\nSave as " + OutPath);
 	}
