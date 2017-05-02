@@ -16,16 +16,16 @@ public class Image2BinaryMap {
 	
 	public static void main () throws IOException {
 		// Image Path
-		String ImgPath = "C:\\Users\\LqlSoft Computer\\Desktop\\MAP.png";
+		String ImgPath = "C:\\MAP.png";
 		// Output Path
-		String OutPath = "C:\\Users\\LqlSoft Computer\\Desktop\\MAP.v";
+		String OutPath = "C:\\MAP.v";
 		
 		// Read File
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(new File(ImgPath));
 		} catch (Exception e) {
-			System.out.println("Cannot find image");
+			System.out.println("Cannot find image!");
 			System.exit(0);
 		}
 		File result = new File(OutPath);
